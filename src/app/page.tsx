@@ -1,5 +1,18 @@
+import Link from "next/link";
+import Navbar from "@/components/Navbar";
 export default function Home() {
   return (
-    <>{/* <h1 className="text-4xl font-bold mb-4">Welcome to Enzert!</h1> */}</>
+    <main>
+      <Navbar />
+      <h1>Welcome to Enzert</h1>
+
+      <Link href="/login">
+        <button>Login</button>
+      </Link>
+      <br />
+      <Link href="/signup">
+        <button>Create Account</button>
+      </Link>
+    </main>
   );
 }
