@@ -5,5 +5,11 @@ export async function getAlbums(): Promise<Album[]> {
 
   const data = await res.json();
 
+  // 👇 SAFE CHECK (IMPORTANT)
+  if (!Array.isArray(data)) {
+    console.error("API did not return array:", data);
+    return [];
+  }
+
   return data;
 }

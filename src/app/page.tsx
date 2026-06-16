@@ -14,7 +14,7 @@ export default async function Page() {
       <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="flex items-center justify-between ">
           {" "}
-          <h2 className="text-2xl font-bold mb-8 text-[#D4C3BC]">
+          <h2 className="text-yxl font-bold mb-8 text-[#D4C3BC]">
             Trending Collections
           </h2>
           <p className="text-[#46291B] cursor-pointer">View Archive</p>

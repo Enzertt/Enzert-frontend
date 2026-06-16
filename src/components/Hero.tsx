@@ -49,7 +49,7 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-6">
-        <h1 className="text-[#D4C3BC] text-6xl md:text-8xl font-medium tracking-[0.2em]">
+        <h1 className="text-[#D4C3BC] text-6xl  font-medium tracking-[0.2em]">
           እንዝርት
         </h1>
 

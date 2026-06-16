@@ -45,12 +45,12 @@ export default function AlbumCarousel({ albums }: Props) {
       {/* scroll area */}
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto scroll-smooth px-12 scrollbar-hide snap-x snap-mandatory"
+        className="flex gap-2 overflow-x-auto scroll-smooth  scrollbar-hide snap-x snap-mandatory"
       >
         {albums.map((album) => (
           <div
             key={album._id}
-            className="min-w-[280px] flex-shrink-0 snap-start"
+            className="max-w-[200px] flex-shrink-0 snap-start"
           >
             <AlbumCard album={album} />
           </div>
