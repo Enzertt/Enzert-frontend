@@ -29,7 +29,7 @@ export default async function AlbumPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-[#110D0C] text-white relative">
-      {/* HERO BACKGROUND (Spotify vibe) */}
+      {/* HERO BACKGROUND  */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#46291B]/40 via-[#110D0C] to-[#110D0C]" />
 
       <div className="relative max-w-6xl mx-auto px-6 py-20">
