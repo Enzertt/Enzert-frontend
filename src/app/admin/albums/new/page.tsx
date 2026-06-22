@@ -38,7 +38,7 @@ export default function NewAlbumPage() {
     }));
   };
 
-  // upload audio to backend (Cloudinary)
+  // upload audio and image to backend (Cloudinary)
   const uploadAudio = async (file: File) => {
     const data = new FormData();
     data.append("audio", file);
@@ -48,7 +48,39 @@ export default function NewAlbumPage() {
       body: data,
     });
 
-    return await res.json();
+    const body = await res.json();
+
+    if (!res.ok) {
+      throw new Error(body.message || "Audio upload failed");
+    }
+
+    if (!body.audioUrl) {
+      throw new Error("Audio upload did not return a URL");
+    }
+
+    return body;
+  };
+
+  const uploadImage = async (file: File) => {
+    const data = new FormData();
+    data.append("image", file);
+
+    const res = await fetch("http://localhost:5000/api/upload/image", {
+      method: "POST",
+      body: data,
+    });
+
+    const body = await res.json();
+
+    if (!res.ok) {
+      throw new Error(body.message || "Image upload failed");
+    }
+
+    if (!body.imageUrl) {
+      throw new Error("Image upload did not return a URL");
+    }
+
+    return body;
   };
 
   // cover preview
@@ -60,7 +92,14 @@ export default function NewAlbumPage() {
   const addTrack = () => {
     setFormData((prev) => ({
       ...prev,
-      tracks: [...prev.tracks, { title: "", duration: "", file: null }],
+      tracks: [
+        ...prev.tracks,
+        {
+          title: "",
+          duration: "",
+          file: null,
+        },
+      ],
     }));
   };
 
@@ -89,6 +128,17 @@ export default function NewAlbumPage() {
     setLoading(true);
 
     try {
+      if (!formData.coverFile && !formData.coverImage.trim()) {
+        throw new Error("Please upload a cover image");
+      }
+
+      let coverImageUrl = formData.coverImage.trim();
+
+      if (formData.coverFile) {
+        const uploadRes = await uploadImage(formData.coverFile);
+
+        coverImageUrl = uploadRes.imageUrl;
+      }
       const uploadedTracks = await Promise.all(
         formData.tracks.map(async (track) => {
           if (!track.file) {
@@ -114,7 +164,7 @@ export default function NewAlbumPage() {
           title: formData.title,
           artist: formData.artist,
           genre: formData.genre,
-          coverImage: formData.coverImage,
+          coverImage: coverImageUrl,
           year: Number(formData.year),
           description: formData.description,
           featured: formData.featured,
@@ -122,7 +172,10 @@ export default function NewAlbumPage() {
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to create album");
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Failed to create album");
+      }
 
       setMessage("Album created successfully!");
 
@@ -223,15 +276,17 @@ export default function NewAlbumPage() {
               {coverPreview && (
                 <img
                   src={coverPreview}
+                  alt="Cover preview"
                   className="w-full h-48 object-cover rounded-lg"
                 />
               )}
 
-              <label className="cursor-pointer  rounded inline-block">
-                Upload Cover Image
+              <label className="cursor-pointer rounded inline-block">
+                Upload Cover Image <span className="text-[#A04100]">*</span>
                 <input
                   type="file"
                   accept="image/*"
+                  required
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
